@@ -1,7 +1,7 @@
 package UserList
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"reflect"
 	"testing"
 )

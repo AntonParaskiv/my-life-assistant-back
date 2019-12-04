@@ -1,7 +1,8 @@
 package Session
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"reflect"
 	"testing"
 )
@@ -27,10 +28,10 @@ func TestNew(t *testing.T) {
 
 func TestSession_SetUser(t *testing.T) {
 	type fields struct {
-		user *User.User
+		user UserInterface.User
 	}
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name   string
@@ -99,12 +100,12 @@ func TestSession_SetId(t *testing.T) {
 
 func TestSession_User(t *testing.T) {
 	type fields struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name     string
 		fields   fields
-		wantUser *User.User
+		wantUser UserInterface.User
 	}{
 		{
 			name: "Success",

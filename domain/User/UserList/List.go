@@ -1,6 +1,8 @@
 package UserList
 
-import "github.com/AntonParaskiv/my-life-assistant-back/domain/User"
+import (
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+)
 
 type List []*User.User
 

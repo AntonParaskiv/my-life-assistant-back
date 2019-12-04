@@ -1,9 +1,11 @@
 package Session
 
-import "github.com/AntonParaskiv/my-life-assistant-back/domain/User"
+import (
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
+)
 
 type Session struct {
-	user *User.User
+	user UserInterface.User
 	id   string
 }
 
@@ -12,7 +14,7 @@ func New() (s *Session) {
 	return
 }
 
-func (s *Session) SetUser(user *User.User) *Session {
+func (s *Session) SetUser(user UserInterface.User) *Session {
 	s.user = user
 	return s
 }
@@ -22,7 +24,7 @@ func (s *Session) SetId(id string) *Session {
 	return s
 }
 
-func (s *Session) User() (user *User.User) {
+func (s *Session) User() (user UserInterface.User) {
 	user = s.user
 	return
 }

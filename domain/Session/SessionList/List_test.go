@@ -1,8 +1,8 @@
 package SessionList
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"reflect"
 	"testing"
 )
