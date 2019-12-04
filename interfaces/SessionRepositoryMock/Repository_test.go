@@ -1,7 +1,8 @@
 package SessionRepositoryMock
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"reflect"
 	"testing"
 )
@@ -27,10 +28,10 @@ func TestNew(t *testing.T) {
 
 func TestRepository_SetSession(t *testing.T) {
 	type fields struct {
-		session SessionInterface
+		session SessionInterface.Session
 	}
 	type args struct {
-		session SessionInterface
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name   string
@@ -63,13 +64,13 @@ func TestRepository_SetSession(t *testing.T) {
 
 func TestRepository_Session(t *testing.T) {
 	type fields struct {
-		session           SessionInterface
+		session           SessionInterface.Session
 		simulateErrorFlag bool
 	}
 	tests := []struct {
 		name        string
 		fields      fields
-		wantSession SessionInterface
+		wantSession SessionInterface.Session
 	}{
 		{
 			name: "Success",
@@ -94,11 +95,11 @@ func TestRepository_Session(t *testing.T) {
 
 func TestRepository_AddSession(t *testing.T) {
 	type fields struct {
-		session           SessionInterface
+		session           SessionInterface.Session
 		simulateErrorFlag bool
 	}
 	type args struct {
-		session SessionInterface
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name           string
@@ -150,11 +151,11 @@ func TestRepository_AddSession(t *testing.T) {
 
 func TestRepository_IsSessionIdExist(t *testing.T) {
 	type fields struct {
-		session           SessionInterface
+		session           SessionInterface.Session
 		simulateErrorFlag bool
 	}
 	type args struct {
-		session SessionInterface
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name        string
@@ -186,16 +187,15 @@ func TestRepository_IsSessionIdExist(t *testing.T) {
 			wantErr:     false,
 		},
 		{
-			name: "Error",
+			name: "False Session nil",
 			fields: fields{
-				session:           Session.New().SetId("myId"),
-				simulateErrorFlag: true,
+				session: nil,
 			},
 			args: args{
-				session: Session.New().SetId("myId"),
+				session: Session.New().SetId("anotherId"),
 			},
 			wantIsExist: false,
-			wantErr:     true,
+			wantErr:     false,
 		},
 	}
 	for _, tt := range tests {

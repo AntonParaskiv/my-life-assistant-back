@@ -1,7 +1,9 @@
 package SessionRepositoryMock
 
+import "github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
+
 type Repository struct {
-	session           SessionInterface
+	session           SessionInterface.Session
 	simulateErrorFlag bool
 }
 
@@ -10,17 +12,17 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetSession(session SessionInterface) *Repository {
+func (r *Repository) SetSession(session SessionInterface.Session) *Repository {
 	r.session = session
 	return r
 }
 
-func (r *Repository) Session() (session SessionInterface) {
+func (r *Repository) Session() (session SessionInterface.Session) {
 	session = r.session
 	return
 }
 
-func (r *Repository) AddSession(session SessionInterface) (err error) {
+func (r *Repository) AddSession(session SessionInterface.Session) (err error) {
 	if r.IsSetSimulateError() {
 		err = r.Error()
 		return
@@ -30,9 +32,8 @@ func (r *Repository) AddSession(session SessionInterface) (err error) {
 	return
 }
 
-func (r *Repository) IsSessionIdExist(session SessionInterface) (isExist bool, err error) {
-	if r.IsSetSimulateError() {
-		err = r.Error()
+func (r *Repository) IsSessionIdExist(session SessionInterface.Session) (isExist bool, err error) {
+	if r.Session() == nil {
 		return
 	}
 

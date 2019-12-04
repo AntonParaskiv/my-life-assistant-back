@@ -1,8 +1,8 @@
 package UserRepositoryMock
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/UserList"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"reflect"
 	"testing"
 )
@@ -26,12 +26,12 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestRepository_SetUserList(t *testing.T) {
+func TestRepository_SetUser(t *testing.T) {
 	type fields struct {
-		userList UserListInterface
+		user UserInterface.User
 	}
 	type args struct {
-		userList UserListInterface
+		user UserInterface.User
 	}
 	tests := []struct {
 		name   string
@@ -43,113 +43,49 @@ func TestRepository_SetUserList(t *testing.T) {
 			name:   "Success",
 			fields: fields{},
 			args: args{
-				userList: UserList.New().Add(User.New().SetEmail("my@example.com")),
+				user: User.New(),
 			},
 			want: &Repository{
-				userList: UserList.New().Add(User.New().SetEmail("my@example.com")),
+				user: User.New(),
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				userList: tt.fields.userList,
+				user: tt.fields.user,
 			}
-			if got := r.SetUserList(tt.args.userList); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SetUserList() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
-
-func TestRepository_IsUserExist(t *testing.T) {
-	type fields struct {
-		userList *UserList.List
-	}
-	type args struct {
-		user *User.User
-	}
-	tests := []struct {
-		name        string
-		fields      fields
-		args        args
-		wantIsExist bool
-	}{
-		{
-			name: "Exist",
-			fields: fields{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")).
-					Add(User.New().SetEmail("second@user.com")).
-					Add(User.New().SetEmail("third@user.com")),
-			},
-			args: args{
-				user: User.New().SetEmail("second@user.com"),
-			},
-			wantIsExist: true,
-		},
-		{
-			name: "NotExist",
-			fields: fields{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")).
-					Add(User.New().SetEmail("second@user.com")).
-					Add(User.New().SetEmail("third@user.com")),
-			},
-			args: args{
-				user: User.New().SetEmail("fourth@user.com"),
-			},
-			wantIsExist: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &Repository{
-				userList: tt.fields.userList,
-			}
-			if gotIsExist := r.IsUserExist(tt.args.user); gotIsExist != tt.wantIsExist {
-				t.Errorf("IsUserExist() = %v, want %v", gotIsExist, tt.wantIsExist)
+			if got := r.SetUser(tt.args.user); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetUser() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestRepository_addUser(t *testing.T) {
+func TestRepository_User(t *testing.T) {
 	type fields struct {
-		userList *UserList.List
-	}
-	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   *Repository
+		name     string
+		fields   fields
+		wantUser UserInterface.User
 	}{
 		{
 			name: "Success",
 			fields: fields{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")),
+				user: User.New(),
 			},
-			args: args{
-				user: User.New().SetEmail("second@user.com"),
-			},
-			want: &Repository{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")).
-					Add(User.New().SetEmail("second@user.com")),
-			},
+			wantUser: User.New(),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				userList: tt.fields.userList,
+				user: tt.fields.user,
 			}
-			if got := r.addUser(tt.args.user); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("addUser() = %v, want %v", got, tt.want)
+			if gotUser := r.User(); !reflect.DeepEqual(gotUser, tt.wantUser) {
+				t.Errorf("User() = %v, want %v", gotUser, tt.wantUser)
 			}
 		})
 	}
@@ -157,10 +93,11 @@ func TestRepository_addUser(t *testing.T) {
 
 func TestRepository_AddUser(t *testing.T) {
 	type fields struct {
-		userList *UserList.List
+		user              UserInterface.User
+		simulateErrorFlag bool
 	}
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name           string
@@ -170,47 +107,109 @@ func TestRepository_AddUser(t *testing.T) {
 		wantRepository *Repository
 	}{
 		{
-			name: "Error User Exist",
-			fields: fields{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")),
-			},
+			name:   "Success",
+			fields: fields{},
 			args: args{
-				user: User.New().SetEmail("first@user.com"),
-			},
-			wantErr: true,
-			wantRepository: &Repository{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")),
-			},
-		},
-		{
-			name: "Success ",
-			fields: fields{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")),
-			},
-			args: args{
-				user: User.New().SetEmail("second@user.com"),
+				user: User.New().SetEmail("my@example.com"),
 			},
 			wantErr: false,
 			wantRepository: &Repository{
-				userList: UserList.New().
-					Add(User.New().SetEmail("first@user.com")).
-					Add(User.New().SetEmail("second@user.com")),
+				user: User.New().SetEmail("my@example.com"),
+			},
+		},
+		{
+			name: "Error",
+			fields: fields{
+				simulateErrorFlag: true,
+			},
+			args: args{
+				user: User.New().SetEmail("my@example.com"),
+			},
+			wantErr: true,
+			wantRepository: &Repository{
+				user: nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				userList: tt.fields.userList,
+				user:              tt.fields.user,
+				simulateErrorFlag: tt.fields.simulateErrorFlag,
 			}
 			if err := r.AddUser(tt.args.user); (err != nil) != tt.wantErr {
 				t.Errorf("AddUser() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if !reflect.DeepEqual(r, tt.wantRepository) {
-				t.Errorf("Repository = %v, want %v", r, tt.wantRepository)
+				t.Errorf("Repository = %v, wantErr %v", r, tt.wantRepository)
+			}
+		})
+	}
+}
+
+func TestRepository_IsUserExist(t *testing.T) {
+	type fields struct {
+		user              UserInterface.User
+		simulateErrorFlag bool
+	}
+	type args struct {
+		user UserInterface.User
+	}
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantIsExist bool
+		wantErr     bool
+	}{
+		{
+			name: "True",
+			fields: fields{
+				user: User.New().SetEmail("my@example.com"),
+			},
+			args: args{
+				user: User.New().SetEmail("my@example.com"),
+			},
+			wantIsExist: true,
+			wantErr:     false,
+		},
+		{
+			name: "True",
+			fields: fields{
+				user: User.New().SetEmail("my@example.com"),
+			},
+			args: args{
+				user: User.New().SetEmail("another@example.com"),
+			},
+			wantIsExist: false,
+			wantErr:     false,
+		},
+		{
+			name: "Error",
+			fields: fields{
+				user:              User.New().SetEmail("my@example.com"),
+				simulateErrorFlag: true,
+			},
+			args: args{
+				user: User.New().SetEmail("my@example.com"),
+			},
+			wantIsExist: false,
+			wantErr:     true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := &Repository{
+				user:              tt.fields.user,
+				simulateErrorFlag: tt.fields.simulateErrorFlag,
+			}
+			gotIsExist, err := r.IsUserExist(tt.args.user)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("IsUserExist() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if gotIsExist != tt.wantIsExist {
+				t.Errorf("IsUserExist() gotIsExist = %v, want %v", gotIsExist, tt.wantIsExist)
 			}
 		})
 	}
@@ -218,57 +217,67 @@ func TestRepository_AddUser(t *testing.T) {
 
 func TestRepository_Auth(t *testing.T) {
 	type fields struct {
-		userList *UserList.List
+		user              UserInterface.User
+		simulateErrorFlag bool
 	}
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
-		name    string
-		fields  fields
-		args    args
-		wantErr bool
+		name        string
+		fields      fields
+		args        args
+		wantIsValid bool
+		wantErr     bool
 	}{
 		{
-			name: "Success",
+			name: "True",
 			fields: fields{
-				userList: UserList.New().
-					Add(User.New().SetEmail("my@example.com").SetPassword("myPassword")),
+				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 			},
 			args: args{
 				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 			},
-			wantErr: false,
+			wantIsValid: true,
+			wantErr:     false,
 		},
 		{
-			name: "User Not Exist",
+			name: "False",
 			fields: fields{
-				userList: UserList.New(),
-			},
-			args: args{
 				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 			},
-			wantErr: true,
+			args: args{
+				user: User.New().SetEmail("my@example.com").SetPassword("anotherPassword"),
+			},
+			wantIsValid: false,
+			wantErr:     false,
 		},
 		{
-			name: "Password Not Match",
+			name: "Error",
 			fields: fields{
-				userList: UserList.New().
-					Add(User.New().SetEmail("my@example.com").SetPassword("anotherPassword")),
+				user:              User.New().SetEmail("my@example.com").SetPassword("myPassword"),
+				simulateErrorFlag: true,
 			},
 			args: args{
 				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 			},
-			wantErr: true,
+			wantIsValid: false,
+			wantErr:     true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				userList: tt.fields.userList,
+				user:              tt.fields.user,
+				simulateErrorFlag: tt.fields.simulateErrorFlag,
 			}
-			if err := r.Auth(tt.args.user); (err != nil) != tt.wantErr {
+			gotIsValid, err := r.Auth(tt.args.user)
+			if (err != nil) != tt.wantErr {
 				t.Errorf("Auth() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if gotIsValid != tt.wantIsValid {
+				t.Errorf("Auth() gotIsValid = %v, want %v", gotIsValid, tt.wantIsValid)
 			}
 		})
 	}

@@ -1,12 +1,12 @@
 package UserRepositoryMock
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User"
-	"github.com/pkg/errors"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 )
 
 type Repository struct {
-	userList UserListInterface
+	user              UserInterface.User
+	simulateErrorFlag bool
 }
 
 func New() (r *Repository) {
@@ -14,42 +14,42 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetUserList(userList UserListInterface) *Repository {
-	r.userList = userList
+func (r *Repository) SetUser(user UserInterface.User) *Repository {
+	r.user = user
 	return r
 }
 
-func (r *Repository) AddUser(user *User.User) (err error) {
-	if r.IsUserExist(user) {
-		err = errors.Errorf("user already exist")
-		return
-	}
-
-	r.addUser(user)
+func (r *Repository) User() (user UserInterface.User) {
+	user = r.user
 	return
 }
 
-func (r *Repository) Auth(user *User.User) (err error) {
-	listUser := r.userList.GetUserByEmail(user.Email())
-	if listUser == nil {
-		err = errors.Errorf("user doesn't exist")
+func (r *Repository) AddUser(user UserInterface.User) (err error) {
+	if r.IsSetSimulateError() {
+		err = r.Error()
 		return
 	}
 
-	if listUser.Password() != user.Password() {
-		err = errors.Errorf("password doesn't match")
+	r.SetUser(user)
+	return
+}
+
+func (r *Repository) IsUserExist(user UserInterface.User) (isExist bool, err error) {
+	if r.IsSetSimulateError() {
+		err = r.Error()
 		return
 	}
 
+	isExist = r.User().Email() == user.Email()
 	return
 }
 
-func (r *Repository) IsUserExist(user *User.User) (isExist bool) {
-	isExist = r.userList.IsUserExist(user)
-	return
-}
+func (r *Repository) Auth(user UserInterface.User) (isValid bool, err error) {
+	if r.IsSetSimulateError() {
+		err = r.Error()
+		return
+	}
 
-func (r *Repository) addUser(user *User.User) *Repository {
-	r.userList.AddUser(user)
-	return r
+	isValid = r.User().Email() == user.Email() && r.User().Password() == user.Password()
+	return
 }
