@@ -3,7 +3,7 @@ package SessionIdGeneratorMock
 import (
 	"crypto/md5"
 	"fmt"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
 	"io"
 )
 

@@ -1,7 +1,7 @@
 package SessionIdGenerator
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
 	"github.com/google/uuid"
 )
 

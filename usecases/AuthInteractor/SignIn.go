@@ -1,16 +1,20 @@
 package AuthInteractor
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"github.com/pkg/errors"
 )
 
-func (i *Interactor) SignIn(user *User.User) (sessionId string, err error) {
+func (i *Interactor) SignIn(user UserInterface.User) (sessionId string, err error) {
 	// check auth
-	err = i.userRepository.Auth(user)
+	isValid, err := i.userRepository.Auth(user)
 	if err != nil {
-		err = errors.Errorf("auth failed: %s", err.Error())
+		err = errors.Errorf("auth error: %s", err.Error())
+		return
+	}
+	if !isValid {
+		err = errors.Errorf("auth failed: check login/password")
 		return
 	}
 
@@ -20,7 +24,7 @@ func (i *Interactor) SignIn(user *User.User) (sessionId string, err error) {
 	// generate session id and check if it exist
 	for ok := true; ok; {
 		i.sessionIdGenerator.Generate(session)
-		ok = i.sessionRepository.IsSessionIdExist(session)
+		ok, err = i.sessionRepository.IsSessionIdExist(session)
 	}
 
 	err = i.sessionRepository.AddSession(session)

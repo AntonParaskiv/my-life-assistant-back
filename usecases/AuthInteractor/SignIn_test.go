@@ -1,11 +1,11 @@
 package AuthInteractor
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/SessionList"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/UserList"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryMock"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryMock"
 	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGeneratorMock"
 	"reflect"
@@ -14,8 +14,8 @@ import (
 
 func TestInteractor_SignIn(t *testing.T) {
 	type fields struct {
-		userRepository     UserRepositoryInterface
-		sessionRepository  SessionRepositoryInterface
+		userRepository     UserRepositoryInterface.Repository
+		sessionRepository  SessionRepositoryInterface.Repository
 		sessionIdGenerator SessionIdGeneratorInterface
 	}
 	type args struct {
@@ -27,100 +27,69 @@ func TestInteractor_SignIn(t *testing.T) {
 		args                  args
 		wantSessionId         string
 		wantErr               bool
-		wantSessionRepository SessionRepositoryInterface
+		wantSessionRepository SessionRepositoryInterface.Repository
 	}{
 		{
 			name: "Success",
 			fields: fields{
-				userRepository: UserRepositoryMock.New().
-					SetUserList(
-						UserList.New().
-							Add(User.New().SetEmail("first@user.com").SetPassword("firstPassword")).
-							Add(User.New().SetEmail("second@user.com").SetPassword("secondPassword")).
-							Add(User.New().SetEmail("third@user.com").SetPassword("thirdPassword")),
-					),
-				sessionRepository: SessionRepositoryMock.New().
-					SetSessionList(
-						SessionList.New().
-							Add(Session.New().
-								SetUser(User.New().SetEmail("first@user.com").SetPassword("firstPassword")).
-								SetId("b56fc12a106757098d27713141fba845"),
-							),
-					),
+				userRepository: UserRepositoryMock.New().SetUser(
+					User.New().SetEmail("my@example.com").SetPassword("myPassword"),
+				),
+				sessionRepository:  SessionRepositoryMock.New(),
 				sessionIdGenerator: SessionIdGeneratorMock.New(),
 			},
 			args: args{
-				user: User.New().SetEmail("second@user.com").SetPassword("secondPassword"),
+				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 			},
-			wantSessionId: "2e961b3a09933bf36f3143684af693ba",
+			wantSessionId: "dfaa445d48f45b55bd695d89e593063c",
 			wantErr:       false,
-			wantSessionRepository: SessionRepositoryMock.New().
-				SetSessionList(
-					SessionList.New().
-						Add(Session.New().
-							SetUser(User.New().SetEmail("first@user.com").SetPassword("firstPassword")).
-							SetId("b56fc12a106757098d27713141fba845"),
-						).
-						Add(Session.New().
-							SetUser(User.New().SetEmail("second@user.com").SetPassword("secondPassword")).
-							SetId("2e961b3a09933bf36f3143684af693ba"),
-						),
-				),
+			wantSessionRepository: SessionRepositoryMock.New().SetSession(
+				Session.New().
+					SetUser(User.New().SetEmail("my@example.com").SetPassword("myPassword")).
+					SetId("dfaa445d48f45b55bd695d89e593063c"),
+			),
 		},
 		{
-			name: "Error Auth Failed",
+			name: "Auth Error",
 			fields: fields{
-				userRepository: UserRepositoryMock.New().
-					SetUserList(
-						UserList.New().
-							Add(User.New().SetEmail("first@user.com").SetPassword("firstPassword")).
-							Add(User.New().SetEmail("second@user.com").SetPassword("secondPassword")).
-							Add(User.New().SetEmail("third@user.com").SetPassword("thirdPassword")),
-					),
-				sessionRepository:  SessionRepositoryMock.New().SetSessionList(SessionList.New()),
-				sessionIdGenerator: SessionIdGeneratorMock.New(),
+				userRepository: UserRepositoryMock.New().SimulateError(),
 			},
 			args: args{
-				user: User.New().SetEmail("fourth@user.com").SetPassword("fourthPassword"),
+				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 			},
 			wantSessionId:         "",
 			wantErr:               true,
-			wantSessionRepository: SessionRepositoryMock.New().SetSessionList(SessionList.New()),
+			wantSessionRepository: nil,
+		},
+		{
+			name: "Auth Failed",
+			fields: fields{
+				userRepository: UserRepositoryMock.New().SetUser(
+					User.New().SetEmail("my@example.com").SetPassword("myPassword"),
+				),
+			},
+			args: args{
+				User.New().SetEmail("my@example.com").SetPassword("anotherPassword"),
+			},
+			wantSessionId:         "",
+			wantErr:               true,
+			wantSessionRepository: nil,
 		},
 		{
 			name: "Error Add Session Failed",
 			fields: fields{
-				userRepository: UserRepositoryMock.New().
-					SetUserList(
-						UserList.New().
-							Add(User.New().SetEmail("first@user.com").SetPassword("firstPassword")).
-							Add(User.New().SetEmail("second@user.com").SetPassword("secondPassword")).
-							Add(User.New().SetEmail("third@user.com").SetPassword("thirdPassword")),
-					),
-				sessionRepository: SessionRepositoryMock.New().
-					SetSessionList(
-						SessionList.New().
-							Add(Session.New().
-								SetUser(User.New().SetEmail("first@user.com").SetPassword("firstPassword")).
-								SetId("b56fc12a106757098d27713141fba845"),
-							),
-					).
-					SimulateError(),
+				userRepository: UserRepositoryMock.New().SetUser(
+					User.New().SetEmail("my@example.com").SetPassword("myPassword"),
+				),
+				sessionRepository:  SessionRepositoryMock.New().SimulateError(),
 				sessionIdGenerator: SessionIdGeneratorMock.New(),
 			},
 			args: args{
-				user: User.New().SetEmail("first@user.com").SetPassword("firstPassword"),
+				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 			},
-			wantSessionId: "",
-			wantErr:       true,
-			wantSessionRepository: SessionRepositoryMock.New().
-				SetSessionList(
-					SessionList.New().
-						Add(Session.New().
-							SetUser(User.New().SetEmail("first@user.com").SetPassword("firstPassword")).
-							SetId("b56fc12a106757098d27713141fba845"),
-						),
-				),
+			wantSessionId:         "",
+			wantErr:               true,
+			wantSessionRepository: SessionRepositoryMock.New(),
 		},
 	}
 	for _, tt := range tests {

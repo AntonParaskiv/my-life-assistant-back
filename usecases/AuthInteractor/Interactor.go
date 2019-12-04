@@ -1,8 +1,13 @@
 package AuthInteractor
 
+import (
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
+)
+
 type Interactor struct {
-	userRepository     UserRepositoryInterface
-	sessionRepository  SessionRepositoryInterface
+	userRepository     UserRepositoryInterface.Repository
+	sessionRepository  SessionRepositoryInterface.Repository
 	sessionIdGenerator SessionIdGeneratorInterface
 }
 
@@ -11,12 +16,12 @@ func New() (i *Interactor) {
 	return
 }
 
-func (i *Interactor) SetUserRepository(userRepository UserRepositoryInterface) *Interactor {
+func (i *Interactor) SetUserRepository(userRepository UserRepositoryInterface.Repository) *Interactor {
 	i.userRepository = userRepository
 	return i
 }
 
-func (i *Interactor) SetSessionRepository(sessionRepository SessionRepositoryInterface) *Interactor {
+func (i *Interactor) SetSessionRepository(sessionRepository SessionRepositoryInterface.Repository) *Interactor {
 	i.sessionRepository = sessionRepository
 	return i
 }

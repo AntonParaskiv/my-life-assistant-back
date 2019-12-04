@@ -1,7 +1,9 @@
 package AuthInteractor
 
 import (
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryMock"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryMock"
 	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator"
 	"reflect"
@@ -29,10 +31,10 @@ func TestNew(t *testing.T) {
 
 func TestInteractor_SetUserRepository(t *testing.T) {
 	type fields struct {
-		userRepository UserRepositoryInterface
+		userRepository UserRepositoryInterface.Repository
 	}
 	type args struct {
-		userRepository UserRepositoryInterface
+		userRepository UserRepositoryInterface.Repository
 	}
 	tests := []struct {
 		name   string
@@ -65,10 +67,10 @@ func TestInteractor_SetUserRepository(t *testing.T) {
 
 func TestInteractor_SetSessionRepository(t *testing.T) {
 	type fields struct {
-		sessionRepository SessionRepositoryInterface
+		sessionRepository SessionRepositoryInterface.Repository
 	}
 	type args struct {
-		sessionRepository SessionRepositoryInterface
+		sessionRepository SessionRepositoryInterface.Repository
 	}
 	tests := []struct {
 		name   string
