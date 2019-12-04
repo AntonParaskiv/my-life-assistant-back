@@ -1,12 +1,7 @@
 package SessionRepositoryMock
 
-import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
-	"github.com/pkg/errors"
-)
-
 type Repository struct {
-	sessionList       SessionListInterface
+	session           SessionInterface
 	simulateErrorFlag bool
 }
 
@@ -15,32 +10,32 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetSessionList(sessionList SessionListInterface) *Repository {
-	r.sessionList = sessionList
+func (r *Repository) SetSession(session SessionInterface) *Repository {
+	r.session = session
 	return r
 }
 
-func (r *Repository) AddSession(session *Session.Session) (err error) {
+func (r *Repository) Session() (session SessionInterface) {
+	session = r.session
+	return
+}
+
+func (r *Repository) AddSession(session SessionInterface) (err error) {
 	if r.IsSetSimulateError() {
 		err = r.Error()
 		return
 	}
 
-	if r.IsSessionIdExist(session) {
-		err = errors.Errorf("session id already exist")
+	r.SetSession(session)
+	return
+}
+
+func (r *Repository) IsSessionIdExist(session SessionInterface) (isExist bool, err error) {
+	if r.IsSetSimulateError() {
+		err = r.Error()
 		return
 	}
 
-	r.addSession(session)
+	isExist = r.Session().Id() == session.Id()
 	return
-}
-
-func (r *Repository) IsSessionIdExist(session *Session.Session) (isExist bool) {
-	isExist = r.sessionList.IsSessionIdExist(session)
-	return
-}
-
-func (r *Repository) addSession(session *Session.Session) *Repository {
-	r.sessionList.AddSession(session)
-	return r
 }

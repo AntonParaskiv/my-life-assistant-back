@@ -2,7 +2,6 @@ package SessionRepositoryMock
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/SessionList"
 	"reflect"
 	"testing"
 )
@@ -26,12 +25,12 @@ func TestNew(t *testing.T) {
 	}
 }
 
-func TestRepository_SetSessionList(t *testing.T) {
+func TestRepository_SetSession(t *testing.T) {
 	type fields struct {
-		sessionList SessionListInterface
+		session SessionInterface
 	}
 	type args struct {
-		sessionList SessionListInterface
+		session SessionInterface
 	}
 	tests := []struct {
 		name   string
@@ -43,115 +42,51 @@ func TestRepository_SetSessionList(t *testing.T) {
 			name:   "Success",
 			fields: fields{},
 			args: args{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("myId")),
+				session: Session.New(),
 			},
 			want: &Repository{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("myId")),
+				session: Session.New(),
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				sessionList: tt.fields.sessionList,
+				session: tt.fields.session,
 			}
-			if got := r.SetSessionList(tt.args.sessionList); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("SetSessionList() = %v, want %v", got, tt.want)
+			if got := r.SetSession(tt.args.session); !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("SetSession() = %v, want %v", got, tt.want)
 			}
 		})
 	}
 }
 
-func TestRepository_IsSessionIdExist(t *testing.T) {
+func TestRepository_Session(t *testing.T) {
 	type fields struct {
-		sessionList *SessionList.List
-	}
-	type args struct {
-		session *Session.Session
+		session           SessionInterface
+		simulateErrorFlag bool
 	}
 	tests := []struct {
 		name        string
 		fields      fields
-		args        args
-		wantIsExist bool
-	}{
-		{
-			name: "Exist",
-			fields: fields{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")).
-					Add(Session.New().SetId("secondId")).
-					Add(Session.New().SetId("thirdId")),
-			},
-			args: args{
-				session: Session.New().SetId("secondId"),
-			},
-			wantIsExist: true,
-		},
-		{
-			name: "NotExist",
-			fields: fields{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")).
-					Add(Session.New().SetId("secondId")).
-					Add(Session.New().SetId("thirdId")),
-			},
-			args: args{
-				session: Session.New().SetId("fourthId"),
-			},
-			wantIsExist: false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			r := &Repository{
-				sessionList: tt.fields.sessionList,
-			}
-			if gotIsExist := r.IsSessionIdExist(tt.args.session); gotIsExist != tt.wantIsExist {
-				t.Errorf("IsSessionIdExist() = %v, want %v", gotIsExist, tt.wantIsExist)
-			}
-		})
-	}
-}
-
-func TestRepository_addSession(t *testing.T) {
-	type fields struct {
-		sessionList *SessionList.List
-	}
-	type args struct {
-		session *Session.Session
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   *Repository
+		wantSession SessionInterface
 	}{
 		{
 			name: "Success",
 			fields: fields{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
+				session: Session.New(),
 			},
-			args: args{
-				session: Session.New().SetId("secondId"),
-			},
-			want: &Repository{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")).
-					Add(Session.New().SetId("secondId")),
-			},
+			wantSession: Session.New(),
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				sessionList: tt.fields.sessionList,
+				session:           tt.fields.session,
+				simulateErrorFlag: tt.fields.simulateErrorFlag,
 			}
-			if got := r.addSession(tt.args.session); !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("addSession() = %v, want %v", got, tt.want)
+			if gotSession := r.Session(); !reflect.DeepEqual(gotSession, tt.wantSession) {
+				t.Errorf("Session() = %v, want %v", gotSession, tt.wantSession)
 			}
 		})
 	}
@@ -159,11 +94,11 @@ func TestRepository_addSession(t *testing.T) {
 
 func TestRepository_AddSession(t *testing.T) {
 	type fields struct {
-		sessionList       *SessionList.List
+		session           SessionInterface
 		simulateErrorFlag bool
 	}
 	type args struct {
-		session *Session.Session
+		session SessionInterface
 	}
 	tests := []struct {
 		name           string
@@ -173,64 +108,109 @@ func TestRepository_AddSession(t *testing.T) {
 		wantRepository *Repository
 	}{
 		{
-			name: "Error Simulated",
-			fields: fields{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
-				simulateErrorFlag: true,
-			},
+			name:   "Success",
+			fields: fields{},
 			args: args{
-				session: Session.New().SetId("firstId"),
-			},
-			wantErr: true,
-			wantRepository: &Repository{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
-			},
-		},
-		{
-			name: "Error Session Exist",
-			fields: fields{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
-			},
-			args: args{
-				session: Session.New().SetId("firstId"),
-			},
-			wantErr: true,
-			wantRepository: &Repository{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
-			},
-		},
-		{
-			name: "Success ",
-			fields: fields{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
-			},
-			args: args{
-				session: Session.New().SetId("secondId"),
+				session: Session.New(),
 			},
 			wantErr: false,
 			wantRepository: &Repository{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")).
-					Add(Session.New().SetId("secondId")),
+				session: Session.New(),
+			},
+		},
+		{
+			name: "Error",
+			fields: fields{
+				simulateErrorFlag: true,
+			},
+			args: args{
+				session: Session.New(),
+			},
+			wantErr: true,
+			wantRepository: &Repository{
+				session: nil,
 			},
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				sessionList:       tt.fields.sessionList,
+				session:           tt.fields.session,
 				simulateErrorFlag: tt.fields.simulateErrorFlag,
 			}
 			if err := r.AddSession(tt.args.session); (err != nil) != tt.wantErr {
 				t.Errorf("AddSession() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if !reflect.DeepEqual(r, tt.wantRepository) {
-				t.Errorf("Repository = %v, want %v", r, tt.wantRepository)
+				t.Errorf("Repository= %v, want %v", r, tt.wantRepository)
+			}
+		})
+	}
+}
+
+func TestRepository_IsSessionIdExist(t *testing.T) {
+	type fields struct {
+		session           SessionInterface
+		simulateErrorFlag bool
+	}
+	type args struct {
+		session SessionInterface
+	}
+	tests := []struct {
+		name        string
+		fields      fields
+		args        args
+		wantIsExist bool
+		wantErr     bool
+	}{
+		{
+			name: "True",
+			fields: fields{
+				session: Session.New().SetId("myId"),
+			},
+			args: args{
+				session: Session.New().SetId("myId"),
+			},
+			wantIsExist: true,
+			wantErr:     false,
+		},
+		{
+			name: "False",
+			fields: fields{
+				session: Session.New().SetId("myId"),
+			},
+			args: args{
+				session: Session.New().SetId("anotherId"),
+			},
+			wantIsExist: false,
+			wantErr:     false,
+		},
+		{
+			name: "Error",
+			fields: fields{
+				session:           Session.New().SetId("myId"),
+				simulateErrorFlag: true,
+			},
+			args: args{
+				session: Session.New().SetId("myId"),
+			},
+			wantIsExist: false,
+			wantErr:     true,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			r := &Repository{
+				session:           tt.fields.session,
+				simulateErrorFlag: tt.fields.simulateErrorFlag,
+			}
+			gotIsExist, err := r.IsSessionIdExist(tt.args.session)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("IsSessionIdExist() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if gotIsExist != tt.wantIsExist {
+				t.Errorf("IsSessionIdExist() gotIsExist = %v, want %v", gotIsExist, tt.wantIsExist)
 			}
 		})
 	}
