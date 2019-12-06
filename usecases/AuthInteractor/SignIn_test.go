@@ -8,7 +8,8 @@ import (
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryMock"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryMock"
-	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGeneratorMock"
+	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator/SessionIdGeneratorInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator/SessionIdGeneratorMock"
 	"reflect"
 	"testing"
 )
@@ -16,7 +17,7 @@ import (
 func TestInteractor_generateUniqueSessionId(t *testing.T) {
 	type fields struct {
 		sessionRepository  SessionRepositoryInterface.Repository
-		sessionIdGenerator SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
 	}
 	type args struct {
 		session *Session.Session
@@ -76,7 +77,7 @@ func TestInteractor_generateUniqueSessionId(t *testing.T) {
 func TestInteractor_createSession(t *testing.T) {
 	type fields struct {
 		sessionRepository  SessionRepositoryInterface.Repository
-		sessionIdGenerator SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
 	}
 	type args struct {
 		user UserInterface.User
@@ -146,7 +147,7 @@ func TestInteractor_IsUserValid(t *testing.T) {
 	type fields struct {
 		userRepository     UserRepositoryInterface.Repository
 		sessionRepository  SessionRepositoryInterface.Repository
-		sessionIdGenerator SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
 	}
 	type args struct {
 		user UserInterface.User
@@ -200,7 +201,7 @@ func TestInteractor_IsUserValid(t *testing.T) {
 		{
 			name: "Error",
 			fields: fields{
-				userRepository: UserRepositoryMock.New().SimulateError().
+				userRepository: UserRepositoryMock.New().SimulateError(0).
 					SetUser(
 						User.New().SetEmail("my@example.com").SetPassword("myPassword"),
 					),
@@ -235,7 +236,7 @@ func TestInteractor_SignIn(t *testing.T) {
 	type fields struct {
 		userRepository     UserRepositoryInterface.Repository
 		sessionRepository  SessionRepositoryInterface.Repository
-		sessionIdGenerator SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
 	}
 	type args struct {
 		user UserInterface.User
@@ -270,7 +271,7 @@ func TestInteractor_SignIn(t *testing.T) {
 		{
 			name: "Error check valid",
 			fields: fields{
-				userRepository:     UserRepositoryMock.New().SimulateError(),
+				userRepository:     UserRepositoryMock.New().SimulateError(0),
 				sessionRepository:  SessionRepositoryMock.New(),
 				sessionIdGenerator: SessionIdGeneratorMock.New(),
 			},

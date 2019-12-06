@@ -7,4 +7,5 @@ import (
 type Repository interface {
 	AddUser(user UserInterface.User) (err error)
 	Auth(user UserInterface.User) (isValid bool, err error)
+	IsUserExist(user UserInterface.User) (isExist bool, err error)
 }

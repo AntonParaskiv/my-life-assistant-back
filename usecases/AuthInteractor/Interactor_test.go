@@ -5,7 +5,8 @@ import (
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryMock"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryMock"
-	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator"
+	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator/SessionIdGenerator"
+	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator/SessionIdGeneratorInterface"
 	"reflect"
 	"testing"
 )
@@ -103,10 +104,10 @@ func TestInteractor_SetSessionRepository(t *testing.T) {
 
 func TestInteractor_SetSessionIdGenerator(t *testing.T) {
 	type fields struct {
-		sessionIdGenerator SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
 	}
 	type args struct {
-		sessionIdGenerator SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
 	}
 	tests := []struct {
 		name   string

@@ -6,6 +6,7 @@ import (
 
 type Repository struct {
 	user              UserInterface.User
+	stepMatch         int
 	simulateErrorFlag bool
 }
 
@@ -37,6 +38,10 @@ func (r *Repository) AddUser(user UserInterface.User) (err error) {
 func (r *Repository) IsUserExist(user UserInterface.User) (isExist bool, err error) {
 	if r.IsSetSimulateError() {
 		err = r.Error()
+		return
+	}
+
+	if r.User() == nil {
 		return
 	}
 
