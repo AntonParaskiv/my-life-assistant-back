@@ -6,11 +6,9 @@ import (
 	"github.com/pkg/errors"
 )
 
-func (i *Interactor) SignIn(user UserInterface.User) (sessionId string, err error) {
-	// check auth
-	isValid, err := i.userRepository.Auth(user)
+func (i *Interactor) SignIn(user UserInterface.User) (session *Session.Session, err error) {
+	isValid, err := i.IsUserValid(user)
 	if err != nil {
-		err = errors.Errorf("auth error: %s", err.Error())
 		return
 	}
 	if !isValid {
@@ -18,21 +16,44 @@ func (i *Interactor) SignIn(user UserInterface.User) (sessionId string, err erro
 		return
 	}
 
-	// create session
-	session := Session.New().SetUser(user)
-
-	// generate session id and check if it exist
-	for ok := true; ok; {
-		i.sessionIdGenerator.Generate(session)
-		ok, err = i.sessionRepository.IsSessionIdExist(session)
-	}
-
-	err = i.sessionRepository.AddSession(session)
+	session, err = i.createSession(user)
 	if err != nil {
 		err = errors.Errorf("create session failed: %s", err.Error())
 		return
 	}
 
-	sessionId = session.Id()
+	return
+}
+
+func (i *Interactor) IsUserValid(user UserInterface.User) (isValid bool, err error) {
+	isValid, err = i.userRepository.Auth(user)
+	if err != nil {
+		err = errors.Errorf("auth error: %s", err.Error())
+		return
+	}
+	return
+}
+
+func (i *Interactor) createSession(user UserInterface.User) (session *Session.Session, err error) {
+	session = Session.New().SetUser(user)
+	session, err = i.generateUniqueSessionId(session)
+	if err != nil {
+		return
+	}
+
+	err = i.sessionRepository.AddSession(session)
+	return
+}
+
+func (i *Interactor) generateUniqueSessionId(session *Session.Session) (sessionWithId *Session.Session, err error) {
+	for ok := true; ok; {
+		i.sessionIdGenerator.Generate(session)
+		ok, err = i.sessionRepository.IsSessionIdExist(session)
+	}
+	if err != nil {
+		err = errors.Errorf("create session failed: %s", err.Error())
+		return
+	}
+	sessionWithId = session
 	return
 }

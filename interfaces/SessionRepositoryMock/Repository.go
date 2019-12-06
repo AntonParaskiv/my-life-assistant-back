@@ -33,6 +33,11 @@ func (r *Repository) AddSession(session SessionInterface.Session) (err error) {
 }
 
 func (r *Repository) IsSessionIdExist(session SessionInterface.Session) (isExist bool, err error) {
+	if r.IsSetSimulateError() {
+		err = r.Error()
+		return
+	}
+
 	if r.Session() == nil {
 		return
 	}

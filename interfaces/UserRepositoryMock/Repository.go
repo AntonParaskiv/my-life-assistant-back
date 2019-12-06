@@ -50,6 +50,10 @@ func (r *Repository) Auth(user UserInterface.User) (isValid bool, err error) {
 		return
 	}
 
+	if r.User() == nil {
+		return
+	}
+
 	isValid = r.User().Email() == user.Email() && r.User().Password() == user.Password()
 	return
 }
