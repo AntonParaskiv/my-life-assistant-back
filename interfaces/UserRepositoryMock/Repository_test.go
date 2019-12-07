@@ -185,6 +185,17 @@ func TestRepository_IsUserExist(t *testing.T) {
 			wantErr:     false,
 		},
 		{
+			name: "False User not set",
+			fields: fields{
+				user: nil,
+			},
+			args: args{
+				user: User.New().SetEmail("my@example.com"),
+			},
+			wantIsExist: false,
+			wantErr:     false,
+		},
+		{
 			name: "Error",
 			fields: fields{
 				user:              User.New().SetEmail("my@example.com"),
@@ -242,9 +253,31 @@ func TestRepository_Auth(t *testing.T) {
 			wantErr:     false,
 		},
 		{
-			name: "False",
+			name: "False user mismatch",
 			fields: fields{
 				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
+			},
+			args: args{
+				user: User.New().SetEmail("another@example.com").SetPassword("myPassword"),
+			},
+			wantIsValid: false,
+			wantErr:     false,
+		},
+		{
+			name: "False password mismatch",
+			fields: fields{
+				user: User.New().SetEmail("my@example.com").SetPassword("myPassword"),
+			},
+			args: args{
+				user: User.New().SetEmail("my@example.com").SetPassword("anotherPassword"),
+			},
+			wantIsValid: false,
+			wantErr:     false,
+		},
+		{
+			name: "False User not set",
+			fields: fields{
+				user: nil,
 			},
 			args: args{
 				user: User.New().SetEmail("my@example.com").SetPassword("anotherPassword"),

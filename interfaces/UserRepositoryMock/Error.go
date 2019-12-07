@@ -5,7 +5,7 @@ import "github.com/pkg/errors"
 const ErrorSimulated = "simulated error"
 
 func (r *Repository) SimulateError(stepMatch int) *Repository {
-	r.stepMatch = stepMatch
+	r.simulateErrorStepMatch = stepMatch
 	r.simulateErrorFlag = true
 	return r
 }
@@ -15,8 +15,8 @@ func (r *Repository) IsSetSimulateError() (isSetSimulateError bool) {
 		return
 	}
 
-	if r.stepMatch > 0 {
-		r.stepMatch--
+	if r.simulateErrorStepMatch > 0 {
+		r.simulateErrorStepMatch--
 		return
 	}
 

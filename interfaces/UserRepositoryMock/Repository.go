@@ -5,9 +5,9 @@ import (
 )
 
 type Repository struct {
-	user              UserInterface.User
-	stepMatch         int
-	simulateErrorFlag bool
+	user                   UserInterface.User
+	simulateErrorStepMatch int
+	simulateErrorFlag      bool
 }
 
 func New() (r *Repository) {
