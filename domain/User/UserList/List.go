@@ -1,33 +1,33 @@
 package UserList
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 )
 
-type List []*User.User
+type List []UserInterface.User
 
 func New() (ul *List) {
 	ul = &List{}
 	return
 }
 
-func (list *List) AddUser(user *User.User) (err error) {
+func (list *List) AddUser(user UserInterface.User) (err error) {
 	list.Add(user)
 	return
 }
 
-func (list *List) Add(user *User.User) *List {
+func (list *List) Add(user UserInterface.User) *List {
 	*list = append(*list, user)
 	return list
 }
 
-func (list *List) GetUserByEmail(email string) (user *User.User) {
+func (list *List) GetUserByEmail(email string) (user UserInterface.User) {
 	key := list.searchUserByEmail(email)
 	user = list.getUserByKey(key)
 	return
 }
 
-func (list *List) IsUserExist(user *User.User) (isExist bool) {
+func (list *List) IsUserExist(user UserInterface.User) (isExist bool) {
 	key := list.searchUserByEmail(user.Email())
 	isExist = list.isKeyValid(key)
 	return
@@ -47,7 +47,7 @@ func (list *List) searchUserByEmail(email string) (key int) {
 	return
 }
 
-func (list *List) getUserByKey(key int) (user *User.User) {
+func (list *List) getUserByKey(key int) (user UserInterface.User) {
 	if !list.isKeyValid(key) {
 		return
 	}

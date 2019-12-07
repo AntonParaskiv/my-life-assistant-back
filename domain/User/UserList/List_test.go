@@ -2,6 +2,7 @@ package UserList
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"reflect"
 	"testing"
 )
@@ -27,7 +28,7 @@ func TestNew(t *testing.T) {
 
 func TestList_Add(t *testing.T) {
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name string
@@ -68,7 +69,7 @@ func TestList_Add(t *testing.T) {
 
 func TestList_AddUser(t *testing.T) {
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name     string
@@ -299,7 +300,7 @@ func TestList_getUserByKey(t *testing.T) {
 		name     string
 		list     List
 		args     args
-		wantUser *User.User
+		wantUser UserInterface.User
 	}{
 		{
 			name: "Exist",
@@ -375,7 +376,7 @@ func TestList_GetUserByEmail(t *testing.T) {
 		name     string
 		list     List
 		args     args
-		wantUser *User.User
+		wantUser UserInterface.User
 	}{
 		{
 			name: "Success",
@@ -409,7 +410,7 @@ func TestList_GetUserByEmail(t *testing.T) {
 
 func TestList_IsUserExist(t *testing.T) {
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name        string
