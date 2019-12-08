@@ -30,10 +30,10 @@ func TestNew(t *testing.T) {
 
 func TestRepository_SetUserList(t *testing.T) {
 	type fields struct {
-		userList UserListInterface.UserListInterface
+		userList UserListInterface.UserList
 	}
 	type args struct {
-		userList UserListInterface.UserListInterface
+		userList UserListInterface.UserList
 	}
 	tests := []struct {
 		name   string
@@ -66,7 +66,7 @@ func TestRepository_SetUserList(t *testing.T) {
 
 func TestRepository_IsUserExist(t *testing.T) {
 	type fields struct {
-		userList UserListInterface.UserListInterface
+		userList UserListInterface.UserList
 	}
 	type args struct {
 		user UserInterface.User
@@ -228,7 +228,7 @@ func TestRepository_AddUser(t *testing.T) {
 
 func TestRepository_Auth(t *testing.T) {
 	type fields struct {
-		userList UserListInterface.UserListInterface
+		userList UserListInterface.UserList
 	}
 	type args struct {
 		user UserInterface.User

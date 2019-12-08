@@ -2,6 +2,7 @@ package SessionList
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"reflect"
 	"testing"
@@ -28,7 +29,7 @@ func TestNew(t *testing.T) {
 
 func TestList_Add(t *testing.T) {
 	type args struct {
-		session *Session.Session
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name string
@@ -61,7 +62,7 @@ func TestList_Add(t *testing.T) {
 
 func TestList_AddSession(t *testing.T) {
 	type args struct {
-		session *Session.Session
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name     string
@@ -273,7 +274,7 @@ func TestList_getSessionByKey(t *testing.T) {
 		name        string
 		list        List
 		args        args
-		wantSession *Session.Session
+		wantSession SessionInterface.Session
 	}{
 		{
 			name: "Exist",
@@ -329,7 +330,7 @@ func TestList_GetSessionById(t *testing.T) {
 		name        string
 		list        List
 		args        args
-		wantSession *Session.Session
+		wantSession SessionInterface.Session
 	}{
 		{
 			name: "Success",
@@ -355,7 +356,7 @@ func TestList_GetSessionById(t *testing.T) {
 
 func TestList_IsSessionIdExist(t *testing.T) {
 	type args struct {
-		session *Session.Session
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name        string

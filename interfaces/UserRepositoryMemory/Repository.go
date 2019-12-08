@@ -7,7 +7,7 @@ import (
 )
 
 type Repository struct {
-	userList UserListInterface.UserListInterface
+	userList UserListInterface.UserList
 }
 
 func New() (r *Repository) {
@@ -15,7 +15,7 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetUserList(userList UserListInterface.UserListInterface) *Repository {
+func (r *Repository) SetUserList(userList UserListInterface.UserList) *Repository {
 	r.userList = userList
 	return r
 }

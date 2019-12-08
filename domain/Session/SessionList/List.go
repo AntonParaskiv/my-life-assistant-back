@@ -1,33 +1,33 @@
 package SessionList
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 )
 
-type List []*Session.Session
+type List []SessionInterface.Session
 
 func New() (list *List) {
 	list = &List{}
 	return
 }
 
-func (list *List) AddSession(session *Session.Session) (err error) {
+func (list *List) AddSession(session SessionInterface.Session) (err error) {
 	list.Add(session)
 	return
 }
 
-func (list *List) Add(session *Session.Session) *List {
+func (list *List) Add(session SessionInterface.Session) *List {
 	*list = append(*list, session)
 	return list
 }
 
-func (list *List) GetSessionById(id string) (session *Session.Session) {
+func (list *List) GetSessionById(id string) (session SessionInterface.Session) {
 	key := list.searchSessionById(id)
 	session = list.getSessionByKey(key)
 	return
 }
 
-func (list *List) IsSessionIdExist(session *Session.Session) (isExist bool) {
+func (list *List) IsSessionIdExist(session SessionInterface.Session) (isExist bool) {
 	key := list.searchSessionById(session.Id())
 	isExist = list.isKeyValid(key)
 	return
@@ -47,7 +47,7 @@ func (list *List) searchSessionById(id string) (key int) {
 	return
 }
 
-func (list *List) getSessionByKey(key int) (session *Session.Session) {
+func (list *List) getSessionByKey(key int) (session SessionInterface.Session) {
 	if !list.isKeyValid(key) {
 		return
 	}
