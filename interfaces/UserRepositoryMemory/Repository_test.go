@@ -5,6 +5,7 @@ import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserList"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserListInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"reflect"
 	"testing"
 )
@@ -30,16 +31,16 @@ func TestNew(t *testing.T) {
 
 func TestRepository_SetUserList(t *testing.T) {
 	type fields struct {
-		userList UserListInterface.UserList
+		userList UserListInterface.List
 	}
 	type args struct {
-		userList UserListInterface.UserList
+		userList UserListInterface.List
 	}
 	tests := []struct {
 		name   string
 		fields fields
 		args   args
-		want   *Repository
+		want   UserRepositoryInterface.Repository
 	}{
 		{
 			name:   "Success",
@@ -66,7 +67,7 @@ func TestRepository_SetUserList(t *testing.T) {
 
 func TestRepository_IsUserExist(t *testing.T) {
 	type fields struct {
-		userList UserListInterface.UserList
+		userList UserListInterface.List
 	}
 	type args struct {
 		user UserInterface.User
@@ -126,7 +127,7 @@ func TestRepository_IsUserExist(t *testing.T) {
 
 func TestRepository_addUser(t *testing.T) {
 	type fields struct {
-		userList *UserList.List
+		userList UserListInterface.List
 	}
 	type args struct {
 		user UserInterface.User
@@ -135,7 +136,7 @@ func TestRepository_addUser(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *Repository
+		want   UserRepositoryInterface.Repository
 	}{
 		{
 			name: "Success",
@@ -167,7 +168,7 @@ func TestRepository_addUser(t *testing.T) {
 
 func TestRepository_AddUser(t *testing.T) {
 	type fields struct {
-		userList *UserList.List
+		userList UserListInterface.List
 	}
 	type args struct {
 		user UserInterface.User
@@ -177,7 +178,7 @@ func TestRepository_AddUser(t *testing.T) {
 		fields         fields
 		args           args
 		wantErr        bool
-		wantRepository *Repository
+		wantRepository UserRepositoryInterface.Repository
 	}{
 		{
 			name: "Error User Exist",
@@ -228,7 +229,7 @@ func TestRepository_AddUser(t *testing.T) {
 
 func TestRepository_Auth(t *testing.T) {
 	type fields struct {
-		userList UserListInterface.UserList
+		userList UserListInterface.List
 	}
 	type args struct {
 		user UserInterface.User

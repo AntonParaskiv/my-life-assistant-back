@@ -3,6 +3,7 @@ package SessionList
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionListInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"reflect"
 	"testing"
@@ -35,7 +36,7 @@ func TestList_Add(t *testing.T) {
 		name string
 		list List
 		args args
-		want *List
+		want SessionListInterface.List
 	}{
 		{
 			name: "Success",
@@ -144,14 +145,14 @@ func TestList_searchSessionById(t *testing.T) {
 
 func TestList_Len(t *testing.T) {
 	tests := []struct {
-		name          string
-		list          List
-		wantListength int
+		name       string
+		list       List
+		wantLength int
 	}{
 		{
-			name:          "Zero",
-			list:          List{},
-			wantListength: 0,
+			name:       "Zero",
+			list:       List{},
+			wantLength: 0,
 		},
 		{
 			name: "Three",
@@ -160,13 +161,13 @@ func TestList_Len(t *testing.T) {
 				Session.New(),
 				Session.New(),
 			},
-			wantListength: 3,
+			wantLength: 3,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if gotLength := tt.list.Len(); gotLength != tt.wantListength {
-				t.Errorf("Len() = %v, want %v", gotLength, tt.wantListength)
+			if gotLength := tt.list.Len(); gotLength != tt.wantLength {
+				t.Errorf("Len() = %v, want %v", gotLength, tt.wantLength)
 			}
 		})
 	}

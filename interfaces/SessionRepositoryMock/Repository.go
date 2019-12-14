@@ -1,6 +1,9 @@
 package SessionRepositoryMock
 
-import "github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
+import (
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryInterface"
+)
 
 type Repository struct {
 	session           SessionInterface.Session
@@ -12,7 +15,7 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetSession(session SessionInterface.Session) *Repository {
+func (r *Repository) SetSession(session SessionInterface.Session) SessionRepositoryInterface.Repository {
 	r.session = session
 	return r
 }

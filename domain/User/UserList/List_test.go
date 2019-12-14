@@ -3,6 +3,7 @@ package UserList
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserListInterface"
 	"reflect"
 	"testing"
 )
@@ -34,7 +35,7 @@ func TestList_Add(t *testing.T) {
 		name string
 		list List
 		args args
-		want *List
+		want UserListInterface.List
 	}{
 		{
 			name: "Success",

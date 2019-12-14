@@ -2,6 +2,7 @@ package SessionList
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionListInterface"
 )
 
 type List []SessionInterface.Session
@@ -16,7 +17,7 @@ func (list *List) AddSession(session SessionInterface.Session) (err error) {
 	return
 }
 
-func (list *List) Add(session SessionInterface.Session) *List {
+func (list *List) Add(session SessionInterface.Session) SessionListInterface.List {
 	*list = append(*list, session)
 	return list
 }

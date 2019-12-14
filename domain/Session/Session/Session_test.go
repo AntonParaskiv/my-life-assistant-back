@@ -1,6 +1,7 @@
 package Session
 
 import (
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"reflect"
@@ -37,7 +38,7 @@ func TestSession_SetUser(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *Session
+		want   SessionInterface.Session
 	}{
 		{
 			name:   "Success",
@@ -73,7 +74,7 @@ func TestSession_SetId(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *Session
+		want   SessionInterface.Session
 	}{
 		{
 			name:   "Success",

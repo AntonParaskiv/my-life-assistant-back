@@ -3,11 +3,12 @@ package UserRepositoryMemory
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserListInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"github.com/pkg/errors"
 )
 
 type Repository struct {
-	userList UserListInterface.UserList
+	userList UserListInterface.List
 }
 
 func New() (r *Repository) {
@@ -15,7 +16,7 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetUserList(userList UserListInterface.UserList) *Repository {
+func (r *Repository) SetUserList(userList UserListInterface.List) UserRepositoryInterface.Repository {
 	r.userList = userList
 	return r
 }

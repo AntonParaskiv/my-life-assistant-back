@@ -2,12 +2,13 @@ package UserList
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserListInterface"
 )
 
 type List []UserInterface.User
 
-func New() (ul *List) {
-	ul = &List{}
+func New() (list *List) {
+	list = &List{}
 	return
 }
 
@@ -16,7 +17,7 @@ func (list *List) AddUser(user UserInterface.User) (err error) {
 	return
 }
 
-func (list *List) Add(user UserInterface.User) *List {
+func (list *List) Add(user UserInterface.User) UserListInterface.List {
 	*list = append(*list, user)
 	return list
 }

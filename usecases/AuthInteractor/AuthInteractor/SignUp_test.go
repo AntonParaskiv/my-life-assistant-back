@@ -2,6 +2,7 @@ package AuthInteractor
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryMock"
 	"reflect"
@@ -13,7 +14,7 @@ func TestInteractor_addUser(t *testing.T) {
 		userRepository UserRepositoryInterface.Repository
 	}
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name               string
@@ -67,7 +68,7 @@ func TestInteractor_IsUserExist(t *testing.T) {
 		userRepository UserRepositoryInterface.Repository
 	}
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name        string
@@ -138,7 +139,7 @@ func TestInteractor_SignUp(t *testing.T) {
 		userRepository UserRepositoryInterface.Repository
 	}
 	type args struct {
-		user *User.User
+		user UserInterface.User
 	}
 	tests := []struct {
 		name               string

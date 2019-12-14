@@ -5,6 +5,7 @@ import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionList"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionListInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryInterface"
 	"reflect"
 	"testing"
 )
@@ -30,16 +31,16 @@ func TestNew(t *testing.T) {
 
 func TestRepository_SetSessionList(t *testing.T) {
 	type fields struct {
-		sessionList SessionListInterface.SessionList
+		sessionList SessionListInterface.List
 	}
 	type args struct {
-		sessionList SessionListInterface.SessionList
+		sessionList SessionListInterface.List
 	}
 	tests := []struct {
 		name   string
 		fields fields
 		args   args
-		want   *Repository
+		want   SessionRepositoryInterface.Repository
 	}{
 		{
 			name:   "Success",
@@ -68,8 +69,7 @@ func TestRepository_SetSessionList(t *testing.T) {
 
 func TestRepository_IsSessionIdExist(t *testing.T) {
 	type fields struct {
-		sessionList       SessionListInterface.SessionList
-		simulateErrorFlag bool
+		sessionList SessionListInterface.List
 	}
 	type args struct {
 		session SessionInterface.Session
@@ -113,8 +113,7 @@ func TestRepository_IsSessionIdExist(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				sessionList:       tt.fields.sessionList,
-				simulateErrorFlag: tt.fields.simulateErrorFlag,
+				sessionList: tt.fields.sessionList,
 			}
 			gotIsExist, err := r.IsSessionIdExist(tt.args.session)
 			if (err != nil) != tt.wantErr {
@@ -130,16 +129,16 @@ func TestRepository_IsSessionIdExist(t *testing.T) {
 
 func TestRepository_addSession(t *testing.T) {
 	type fields struct {
-		sessionList *SessionList.List
+		sessionList SessionListInterface.List
 	}
 	type args struct {
-		session *Session.Session
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name   string
 		fields fields
 		args   args
-		want   *Repository
+		want   SessionRepositoryInterface.Repository
 	}{
 		{
 			name: "Success",
@@ -171,11 +170,10 @@ func TestRepository_addSession(t *testing.T) {
 
 func TestRepository_AddSession(t *testing.T) {
 	type fields struct {
-		sessionList       *SessionList.List
-		simulateErrorFlag bool
+		sessionList SessionListInterface.List
 	}
 	type args struct {
-		session *Session.Session
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name           string
@@ -184,22 +182,6 @@ func TestRepository_AddSession(t *testing.T) {
 		wantErr        bool
 		wantRepository *Repository
 	}{
-		{
-			name: "Error Simulated",
-			fields: fields{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
-				simulateErrorFlag: true,
-			},
-			args: args{
-				session: Session.New().SetId("firstId"),
-			},
-			wantErr: true,
-			wantRepository: &Repository{
-				sessionList: SessionList.New().
-					Add(Session.New().SetId("firstId")),
-			},
-		},
 		{
 			name: "Error Session Exist",
 			fields: fields{
@@ -235,8 +217,7 @@ func TestRepository_AddSession(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			r := &Repository{
-				sessionList:       tt.fields.sessionList,
-				simulateErrorFlag: tt.fields.simulateErrorFlag,
+				sessionList: tt.fields.sessionList,
 			}
 			if err := r.AddSession(tt.args.session); (err != nil) != tt.wantErr {
 				t.Errorf("AddSession() error = %v, wantErr %v", err, tt.wantErr)

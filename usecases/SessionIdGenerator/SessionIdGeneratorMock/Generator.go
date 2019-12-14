@@ -3,7 +3,7 @@ package SessionIdGeneratorMock
 import (
 	"crypto/md5"
 	"fmt"
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"io"
 )
 
@@ -15,7 +15,7 @@ func New() (g *Generator) {
 	return
 }
 
-func (g *Generator) Generate(session *Session.Session) *Session.Session {
+func (g *Generator) Generate(session SessionInterface.Session) SessionInterface.Session {
 	newId := g.GenerateIdFromString(session.User().Email() + session.Id())
 	session.SetId(newId)
 	return session

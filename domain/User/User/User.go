@@ -1,5 +1,7 @@
 package User
 
+import "github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
+
 type User struct {
 	email    string
 	password string
@@ -10,12 +12,12 @@ func New() (u *User) {
 	return u
 }
 
-func (u *User) SetEmail(email string) *User {
+func (u *User) SetEmail(email string) UserInterface.User {
 	u.email = email
 	return u
 }
 
-func (u *User) SetPassword(password string) *User {
+func (u *User) SetPassword(password string) UserInterface.User {
 	u.password = password
 	return u
 }

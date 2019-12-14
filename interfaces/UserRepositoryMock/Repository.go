@@ -2,6 +2,7 @@ package UserRepositoryMock
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 )
 
 type Repository struct {
@@ -15,7 +16,7 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetUser(user UserInterface.User) *Repository {
+func (r *Repository) SetUser(user UserInterface.User) UserRepositoryInterface.Repository {
 	r.user = user
 	return r
 }

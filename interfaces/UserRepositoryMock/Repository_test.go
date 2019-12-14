@@ -3,6 +3,7 @@ package UserRepositoryMock
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"reflect"
 	"testing"
 )
@@ -37,7 +38,7 @@ func TestRepository_SetUser(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *Repository
+		want   UserRepositoryInterface.Repository
 	}{
 		{
 			name:   "Success",

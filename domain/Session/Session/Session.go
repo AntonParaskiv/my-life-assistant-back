@@ -1,6 +1,7 @@
 package Session
 
 import (
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 )
 
@@ -14,12 +15,12 @@ func New() (s *Session) {
 	return
 }
 
-func (s *Session) SetUser(user UserInterface.User) *Session {
+func (s *Session) SetUser(user UserInterface.User) SessionInterface.Session {
 	s.user = user
 	return s
 }
 
-func (s *Session) SetId(id string) *Session {
+func (s *Session) SetId(id string) SessionInterface.Session {
 	s.id = id
 	return s
 }

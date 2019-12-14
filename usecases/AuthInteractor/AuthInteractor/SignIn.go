@@ -2,11 +2,12 @@ package AuthInteractor
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"github.com/pkg/errors"
 )
 
-func (i *Interactor) SignIn(user UserInterface.User) (session *Session.Session, err error) {
+func (i *Interactor) SignIn(user UserInterface.User) (session SessionInterface.Session, err error) {
 	isValid, err := i.IsUserValid(user)
 	if err != nil {
 		return
@@ -34,7 +35,8 @@ func (i *Interactor) IsUserValid(user UserInterface.User) (isValid bool, err err
 	return
 }
 
-func (i *Interactor) createSession(user UserInterface.User) (session *Session.Session, err error) {
+func (i *Interactor) createSession(user UserInterface.User) (session SessionInterface.Session, err error) {
+	// TODO: replace constructor with Factory !
 	session = Session.New().SetUser(user)
 	session, err = i.generateUniqueSessionId(session)
 	if err != nil {
@@ -45,7 +47,7 @@ func (i *Interactor) createSession(user UserInterface.User) (session *Session.Se
 	return
 }
 
-func (i *Interactor) generateUniqueSessionId(session *Session.Session) (sessionWithId *Session.Session, err error) {
+func (i *Interactor) generateUniqueSessionId(session SessionInterface.Session) (sessionWithId SessionInterface.Session, err error) {
 	for ok := true; ok; {
 		i.sessionIdGenerator.Generate(session)
 		ok, err = i.sessionRepository.IsSessionIdExist(session)

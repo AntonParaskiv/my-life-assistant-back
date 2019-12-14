@@ -1,11 +1,11 @@
 package AuthInteractor
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"github.com/pkg/errors"
 )
 
-func (i *Interactor) SignUp(user *User.User) (err error) {
+func (i *Interactor) SignUp(user UserInterface.User) (err error) {
 	isExist, err := i.IsUserExist(user)
 	if err != nil {
 		err = errors.Errorf("check if user exist failed")
@@ -25,12 +25,12 @@ func (i *Interactor) SignUp(user *User.User) (err error) {
 	return
 }
 
-func (i *Interactor) IsUserExist(user *User.User) (isExist bool, err error) {
+func (i *Interactor) IsUserExist(user UserInterface.User) (isExist bool, err error) {
 	isExist, err = i.userRepository.IsUserExist(user)
 	return
 }
 
-func (i *Interactor) addUser(user *User.User) (err error) {
+func (i *Interactor) addUser(user UserInterface.User) (err error) {
 	err = i.userRepository.AddUser(user)
 	return
 }

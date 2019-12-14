@@ -1,6 +1,7 @@
 package User
 
 import (
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/UserInterface"
 	"reflect"
 	"testing"
 )
@@ -93,7 +94,7 @@ func TestUser_SetEmail(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *User
+		want   UserInterface.User
 	}{
 		{
 			name:   "Success",
@@ -129,7 +130,7 @@ func TestUser_SetPassword(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *User
+		want   UserInterface.User
 	}{
 		{
 			name:   "Success",

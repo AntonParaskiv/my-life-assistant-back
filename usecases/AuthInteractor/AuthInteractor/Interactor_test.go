@@ -5,8 +5,9 @@ import (
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryMock"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/UserRepositoryMock"
-	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator/SessionIdGenerator"
+	"github.com/AntonParaskiv/my-life-assistant-back/usecases/AuthInteractor/AuthInteractorInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator/SessionIdGeneratorInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/usecases/SessionIdGenerator/SessionIdGeneratorMock"
 	"reflect"
 	"testing"
 )
@@ -41,7 +42,7 @@ func TestInteractor_SetUserRepository(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *Interactor
+		want   AuthInteractorInterface.Interactor
 	}{
 		{
 			name:   "Success",
@@ -77,7 +78,7 @@ func TestInteractor_SetSessionRepository(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *Interactor
+		want   AuthInteractorInterface.Interactor
 	}{
 		{
 			name:   "Success",
@@ -104,25 +105,25 @@ func TestInteractor_SetSessionRepository(t *testing.T) {
 
 func TestInteractor_SetSessionIdGenerator(t *testing.T) {
 	type fields struct {
-		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.Generator
 	}
 	type args struct {
-		sessionIdGenerator SessionIdGeneratorInterface.SessionIdGeneratorInterface
+		sessionIdGenerator SessionIdGeneratorInterface.Generator
 	}
 	tests := []struct {
 		name   string
 		fields fields
 		args   args
-		want   *Interactor
+		want   AuthInteractorInterface.Interactor
 	}{
 		{
 			name:   "Success",
 			fields: fields{},
 			args: args{
-				sessionIdGenerator: SessionIdGenerator.New(),
+				sessionIdGenerator: SessionIdGeneratorMock.New(),
 			},
 			want: &Interactor{
-				sessionIdGenerator: SessionIdGenerator.New(),
+				sessionIdGenerator: SessionIdGeneratorMock.New(),
 			},
 		},
 	}

@@ -2,6 +2,7 @@ package SessionIdGeneratorMock
 
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/User/User"
 	"reflect"
 	"testing"
@@ -82,12 +83,12 @@ func TestGenerator_GenerateIdFromString(t *testing.T) {
 
 func TestGenerator_Generate(t *testing.T) {
 	type args struct {
-		session *Session.Session
+		session SessionInterface.Session
 	}
 	tests := []struct {
 		name string
 		args args
-		want *Session.Session
+		want SessionInterface.Session
 	}{
 		{
 			name: "Success",

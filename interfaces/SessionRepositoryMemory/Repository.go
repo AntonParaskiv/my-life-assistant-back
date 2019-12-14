@@ -3,12 +3,12 @@ package SessionRepositoryMemory
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionListInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryInterface"
 	"github.com/pkg/errors"
 )
 
 type Repository struct {
-	sessionList       SessionListInterface.SessionList
-	simulateErrorFlag bool
+	sessionList SessionListInterface.List
 }
 
 func New() (r *Repository) {
@@ -16,17 +16,12 @@ func New() (r *Repository) {
 	return
 }
 
-func (r *Repository) SetSessionList(sessionList SessionListInterface.SessionList) *Repository {
+func (r *Repository) SetSessionList(sessionList SessionListInterface.List) SessionRepositoryInterface.Repository {
 	r.sessionList = sessionList
 	return r
 }
 
 func (r *Repository) AddSession(session SessionInterface.Session) (err error) {
-	if r.IsSetSimulateError() {
-		err = r.Error()
-		return
-	}
-
 	isExist, _ := r.IsSessionIdExist(session)
 	if isExist {
 		err = errors.Errorf("session id already exist")
@@ -42,7 +37,7 @@ func (r *Repository) IsSessionIdExist(session SessionInterface.Session) (isExist
 	return
 }
 
-func (r *Repository) addSession(session SessionInterface.Session) *Repository {
+func (r *Repository) addSession(session SessionInterface.Session) SessionRepositoryInterface.Repository {
 	_ = r.sessionList.AddSession(session)
 	return r
 }

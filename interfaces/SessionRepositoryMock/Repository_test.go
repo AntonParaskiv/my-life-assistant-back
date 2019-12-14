@@ -3,6 +3,7 @@ package SessionRepositoryMock
 import (
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
 	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
+	"github.com/AntonParaskiv/my-life-assistant-back/interfaces/SessionRepositoryInterface"
 	"reflect"
 	"testing"
 )
@@ -37,7 +38,7 @@ func TestRepository_SetSession(t *testing.T) {
 		name   string
 		fields fields
 		args   args
-		want   *Repository
+		want   SessionRepositoryInterface.Repository
 	}{
 		{
 			name:   "Success",

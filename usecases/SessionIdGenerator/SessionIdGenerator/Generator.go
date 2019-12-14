@@ -1,7 +1,7 @@
 package SessionIdGenerator
 
 import (
-	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/Session"
+	"github.com/AntonParaskiv/my-life-assistant-back/domain/Session/SessionInterface"
 	"github.com/google/uuid"
 )
 
@@ -13,7 +13,7 @@ func New() (g *Generator) {
 	return
 }
 
-func (g *Generator) Generate(session *Session.Session) *Session.Session {
+func (g *Generator) Generate(session SessionInterface.Session) SessionInterface.Session {
 	newId := g.generateNewId()
 	session.SetId(newId)
 	return session
